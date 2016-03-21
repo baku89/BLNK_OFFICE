@@ -1,0 +1,4 @@
+ofxDatGui
+ofxLibwebsockets
+ofxSyphon
+ofxXmlSettings
