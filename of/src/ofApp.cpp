@@ -32,55 +32,37 @@ void ofApp::setup(){
     wsServer.addListener(this);
     
     // setup monitor list
-    string monitorListFile = "monitor-list.json";
-    
+
     loadMonitor();
-    
-//    monitorList["5ive-imac"]    = new Monitor(0.5, 0.8);
-//    monitorList["3no"]          = new Monitor(0.5, 0.4);
-//    monitorList["d-imac"]       = new Monitor(0.5, 0.8);
-//    
-//    monitorList["d-mba"]        = new Monitor(0.5, 0.8);
-//    monitorList["baku-mbp"]     = new Monitor(0.5, 0.4);
-//    monitorList["baku-pro1"]    = new Monitor(0.5, 0.5);
-//    monitorList["baku-pro2"]    = new Monitor(0.5, 0.6);
-//    monitorList["baku-va"]      = new Monitor(0.5, 0.6);
-//    monitorList["baku-imac"]    = new Monitor(0.5, 0.8);
-//    monitorList["dell"]         = new Monitor(0.5, 0.7);
-//    
-//    monitorList["yu"]           = new Monitor(0.5, 0.7);
-//    
-//    monitorList["koki1"]        = new Monitor(0.5, 0.7);
-//    monitorList["koki2"]        = new Monitor(0.5, 0.7);
     
 }
 
 //--------------------------------------------------------------
 void ofApp::loadMonitor() {
     
-    monitorList.clear();
+    monitorList["5ive-imac"]    = new Monitor(0.05, 0.2);
+    monitorList["3no"]          = new Monitor(0.15, 0.5);
+    monitorList["d-imac"]       = new Monitor(0.25, 0.8);
     
-    bool bParse = json.open("monitor-list.json");
+    monitorList["d-mba"]        = new Monitor(0.3, 0.2);
+    monitorList["baku-mbp"]     = new Monitor(0.4, 0.5);
+    monitorList["baku-pro1"]    = new Monitor(0.5, 0.8);
+    monitorList["baku-pro2"]    = new Monitor(0.55, 0.2);
+    monitorList["baku-va"]      = new Monitor(0.6, 0.5);
+    monitorList["dell"]         = new Monitor(0.7, 0.8);
+    monitorList["baku-imac"]    = new Monitor(0.75, 0.2);
     
-    if (bParse) {
-        
-        for (Json::ValueIterator itr = json.begin(); itr != json.end(); itr++) {
-            string key = itr.key().asString();
-            float x = json[key][0].asFloat();
-            float y = json[key][1].asFloat();
-            
-            monitorList[key] = new Monitor(x, y);
-        }
-        
-    } else {
-        
-        ofLog(OF_LOG_ERROR, "Cannot parse monitor-list.json");
-        
-    }
+    monitorList["yu"]           = new Monitor(0.8, 0.5);
+    
+    monitorList["koki1"]        = new Monitor(0.9, 0.8);
+    monitorList["koki2"]        = new Monitor(0.95, 0.5);
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
+    
+    
     
 }
 

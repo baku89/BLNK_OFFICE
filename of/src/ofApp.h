@@ -3,7 +3,6 @@
 #include "ofMain.h"
 #include "ofxDatGui.h"
 #include "ofxSyphon.h"
-#include "ofxJSON.h"
 #include "ofxLibwebsockets.h"
 
 #include "Monitor.h"
@@ -59,7 +58,5 @@ public:
     ofxLibwebsockets::Server wsServer;
     
     stringstream ss;
-    
-    ofxJSONElement json;
 		
 };

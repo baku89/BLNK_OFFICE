@@ -1,4 +1,5 @@
 ofxDatGui
+ofxJSON
 ofxLibwebsockets
 ofxOsc
 ofxSyphon
