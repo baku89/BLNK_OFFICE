@@ -3,9 +3,15 @@
 #include "ofMain.h"
 #include "ofxDatGui.h"
 #include "ofxSyphon.h"
+#include "ofxLibwebsockets.h"
+
+#include "Monitor.h"
 
 #define SYPHON_NAME ""
 #define SYPHON_APP "Simple Server"
+#define GUI_WIDTH 280
+#define WIDTH 640
+#define HEIGHT 160
 
 class ofApp : public ofBaseApp{
 
@@ -27,8 +33,14 @@ public:
 	void gotMessage(ofMessage msg);
 
 	ofxDatGui *gui;
+    ofxDatGuiToggle *guiServing;
 	
 	ofxSyphonClient syphonClient;
 	ofxSyphonServerDirectory syphonDir;
+    
+    vector<Monitor> monitorList;
+    
+    ofFbo fbo;
+    ofPixels pixels;
 		
 };
