@@ -109,11 +109,13 @@ body {
   background: #eee;
   width: 300px;
   height: 100%;
+  overflow: scroll;
   left: 0;
   top: 0;
   padding: 10px;
   -webkit-transform: translate(0%, 0);
   transform: translate(0%, 0);
+  z-index: 100;
 }
 .settings.hidden {
   -webkit-transform: translate(-100%, 0);
@@ -122,8 +124,32 @@ body {
 .item {
   padding: 10px 0;
 }
-.canvas {
-  background: #000;
+.viewer {
+  position: relative;
   width: 100%;
   height: 100%;
+}
+.canvas,
+.canvas-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.canvas {
+  background: #000;
+}
+input[type=file] {
+  display: block;
+  margin-top: 10px;
+}
+.input-image {
+  width: 280px;
+  min-height: 130px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+  background: #999;
 }

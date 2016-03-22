@@ -4,6 +4,7 @@
 #include "ofxDatGui.h"
 #include "ofxSyphon.h"
 #include "ofxLibwebsockets.h"
+#include "ofxOsc.h"
 
 #include "Monitor.h"
 
@@ -13,6 +14,8 @@
 #define WIDTH 320
 #define HEIGHT 80
 #define SCALE 3
+
+#define OSC_PORT 4444
 
 class ofApp : public ofBaseApp{
 
@@ -43,6 +46,7 @@ public:
     void onBroadcast( ofxLibwebsockets::Event& args );
 
 	ofxDatGui *gui;
+    ofxDatGuiToggle *guiDesktop;
     ofxDatGuiToggle *guiServing;
 	
 	ofxSyphonClient syphonClient;
@@ -58,5 +62,7 @@ public:
     ofxLibwebsockets::Server wsServer;
     
     stringstream ss;
+    
+    ofxOscReceiver osc;
 		
 };

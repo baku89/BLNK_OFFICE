@@ -8,10 +8,12 @@ class Client {
 
 	constructor() {
 
-		this.canvas = new Canvas()
-
 		this.settings = new Settings()
 		this.settings.on('update', this.addUser.bind(this))
+
+		this.canvas = new Canvas()
+		this.canvas.setDesktopSource(this.settings.desktop)
+
 
 		this.socket = new Socket(WS_HOST)
 		this.socket.on('connect', this.onConnect.bind(this))
@@ -19,7 +21,10 @@ class Client {
 		this.socket.on('onmessage', this.onMessage.bind(this))
 		this.socket.connect()
 
-
+		this.msgFunc = {
+			color: this.canvas.fill,
+			desktop: this.canvas.setDesktop
+		}
 	}
 
 	onConnect() {
@@ -34,12 +39,11 @@ class Client {
 		this.canvas.fill('black')
 	}
 
-	onMessage(msg) {
-		this.canvas.fill(msg)
+	onMessage(type, value) {
+		this.msgFunc[type](value)
 	}
 
 	addUser() {
-		// console.log('updateName', this.settings.name)
 		this.socket.send({
 			'type': 'add-user',
 			'name': this.settings.name
@@ -47,4 +51,9 @@ class Client {
 	}
 }
 
-new Client()
+
+if (window.File && window.FileReader && window.FileList && window.Blob) {
+	new Client()
+} else {
+	alert('The File APIs are not fully supported in this browser.')
+}

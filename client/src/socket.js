@@ -11,7 +11,6 @@ export default class Socket extends EventEmitter {
 		this.onConnect 		= this.onConnect.bind(this)
 		this.onDisconnect = this.onDisconnect.bind(this)
 		this.onMessage 		= this.onMessage.bind(this)
-
 	}
 
 	connect() {
@@ -33,7 +32,9 @@ export default class Socket extends EventEmitter {
 	}
 
 	onMessage(e) {
-		this.emit('onmessage', e.data)
+		// type:value
+		const data = e.data.split(':')
+		this.emit('onmessage', data[0], data[1])
 	}
 
 	send(object) {

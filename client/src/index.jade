@@ -15,8 +15,23 @@ body
 		.item
 			input#name.settings__name(type='text' value='')
 			button.settings__update Update
+		.item
+			dl
+				dt wallpaper
+				dd
+					input.input-file(type='file')
+					img#desktop-wallpaper.input-image
 
-	canvas.canvas
+				dt normal
+				dd
+					input.input-file(type='file')
+					img#desktop-normal.input-image
+
+
+	.viewer
+		canvas.canvas
+		img#canvas-wallpaper.canvas-image
+		img#canvas-normal.canvas-image
 
 	script(src='js/jquery-2.2.2.min.js')
 	script(src='js/createjs-2015.11.26.min.js')

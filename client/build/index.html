@@ -13,8 +13,22 @@
       <input id="name" type="text" value="" class="settings__name">
       <button class="settings__update">Update</button>
     </div>
+    <div class="item">
+      <dl>
+        <dt>wallpaper</dt>
+        <dd>
+          <input type="file" class="input-file"><img id="desktop-wallpaper" class="input-image">
+        </dd>
+        <dt>normal</dt>
+        <dd>
+          <input type="file" class="input-file"><img id="desktop-normal" class="input-image">
+        </dd>
+      </dl>
+    </div>
   </div>
-  <canvas class="canvas"></canvas>
+  <div class="viewer">
+    <canvas class="canvas"></canvas><img id="canvas-wallpaper" class="canvas-image"><img id="canvas-normal" class="canvas-image">
+  </div>
   <script src="js/jquery-2.2.2.min.js"></script>
   <script src="js/createjs-2015.11.26.min.js"></script>
   <script src="client.js"></script>

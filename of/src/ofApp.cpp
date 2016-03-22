@@ -21,7 +21,10 @@ void ofApp::setup(){
 	gui->setTheme(new ofxDatGuiThemeCharcoal());
 	gui->setWidth(GUI_WIDTH);
     gui->addFRM();
+    guiDesktop = gui->addToggle("desktop");
+    guiDesktop->setEnabled(false);
     guiServing = gui->addToggle("serving");
+    guiServing->setEnabled(true);
     
     // setup websocket server
     ofxLibwebsockets::ServerOptions options = ofxLibwebsockets::defaultServerOptions();
@@ -31,8 +34,10 @@ void ofApp::setup(){
         
     wsServer.addListener(this);
     
+    // osc
+    osc.setup(OSC_PORT);
+    
     // setup monitor list
-
     loadMonitor();
     
 }
@@ -62,8 +67,20 @@ void ofApp::loadMonitor() {
 //--------------------------------------------------------------
 void ofApp::update(){
     
-    
-    
+    while (osc.hasWaitingMessages()) {
+        ofxOscMessage m;
+        osc.getNextMessage(&m);
+        string address = m.getAddress();
+        
+        if (address == "/desktop") {
+            int result = m.getArgAsInt(0);
+            cout << result;
+            guiDesktop->setEnabled(result == 1);
+            ss.str("");
+            ss << "desktop:" << result;
+            wsServer.send(ss.str());
+        }
+    }
 }
 
 //--------------------------------------------------------------
@@ -119,7 +136,7 @@ void ofApp::draw(){
             
             if (c != monitor->color) {
                 ss.str("");
-                ss << "#" << hex << setw(6) << setfill('0') << c.getHex();
+                ss << "color:#" << hex << setw(6) << setfill('0') << c.getHex();
                 monitor->conn->send(ss.str());
             }
             
