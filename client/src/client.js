@@ -9,11 +9,9 @@ class Client {
 	constructor() {
 
 		this.settings = new Settings()
-		this.settings.on('update', this.addUser.bind(this))
+		this.settings.on('update', this.updateUser.bind(this))
 
 		this.canvas = new Canvas()
-		this.canvas.setDesktopSource(this.settings.desktop)
-
 
 		this.socket = new Socket(WS_HOST)
 		this.socket.on('connect', this.onConnect.bind(this))
@@ -30,7 +28,7 @@ class Client {
 	onConnect() {
 		this.settings.status = 'connected'
 		if (this.settings.name != '') {
-			this.addUser()
+			this.updateUser()
 		}
 	}
 
@@ -43,7 +41,8 @@ class Client {
 		this.msgFunc[type](value)
 	}
 
-	addUser() {
+	updateUser() {
+		this.canvas.updateName(this.settings.name)
 		this.socket.send({
 			'type': 'add-user',
 			'name': this.settings.name

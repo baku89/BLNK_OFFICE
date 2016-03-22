@@ -75,7 +75,7 @@ void ofApp::update(){
         if (address == "/desktop") {
             int result = m.getArgAsInt(0);
             cout << result;
-            guiDesktop->setEnabled(result == 1);
+            guiDesktop->setEnabled(result > 0);
             ss.str("");
             ss << "desktop:" << result;
             wsServer.send(ss.str());
