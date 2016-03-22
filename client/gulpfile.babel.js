@@ -26,10 +26,6 @@ gulp.task('webpack', () => {
 		)
 	}
 
-	// config.entry =  [entry]
-	// config.target = target
-	// config.output.filename = entry.replace('src', 'build')
-
 	return gulp.src('')
 		.pipe($.plumber())
 		.pipe(WebpackStream(config))
@@ -38,20 +34,20 @@ gulp.task('webpack', () => {
 })
 
 //==================================================
-gulp.task('babel', () => {
-	return gulp.src('src/server/**/*.js', {base: './src'})
-		.pipe($.plumber())
-		.pipe($.eslint({useEslintrc: true}))
-		.pipe($.if(developmentMode, $.sourcemaps.init()))
-		.pipe($.babel({presets: ['es2015']}))
-		.pipe($.if(developmentMode, $.sourcemaps.write()))
-		.pipe(gulp.dest('build'))
-		.pipe(browserSync.stream())
-})
+// gulp.task('babel', () => {
+// 	return gulp.src('src/server/**/*.js', {base: './src'})
+// 		.pipe($.plumber())
+// 		.pipe($.eslint({useEslintrc: true}))
+// 		.pipe($.if(developmentMode, $.sourcemaps.init()))
+// 		.pipe($.babel({presets: ['es2015']}))
+// 		.pipe($.if(developmentMode, $.sourcemaps.write()))
+// 		.pipe(gulp.dest('build'))
+// 		.pipe(browserSync.stream())
+// })
 
 //==================================================
 gulp.task('jade', () => {
-	return gulp.src('./src/*/*.jade')
+	return gulp.src('./src/**/*.jade')
 		.pipe($.plumber())
 		.pipe($.jade({pretty: developmentMode}))
 		.pipe(gulp.dest('build'))
@@ -72,23 +68,20 @@ gulp.task('stylus', () => {
 
 //==================================================
 gulp.task('browser-sync', () => {
-	browserSync.init({
+	return browserSync.init({
 		port: 9999,
 		open: false,
+		ghostMode: false,
 		server: {
 			baseDir: 'build'
 		}
 	})
-
-	return gulp.src('.', {read: false})
-		.pipe($.shell(['/usr/local/bin/electron ./build > /dev/null']))
 })
 
 //==================================================
 gulp.task('watch', () => {
 	gulp.watch('./src/**/*.styl', ['stylus'])
 	gulp.watch('./src/**/*.jade', ['jade'])
-	gulp.watch(['src/electron.js', 'src/server/**/*.js'], ['babel'])
 })
 
 //==================================================
@@ -99,5 +92,5 @@ gulp.task('release', () => {
 
 //==================================================
 
-gulp.task('default', ['babel', 'webpack', 'jade', 'stylus', 'watch', 'browser-sync'])
+gulp.task('default', ['webpack', 'jade', 'stylus', 'watch', 'browser-sync'])
 gulp.task('build', ['release', 'jade', 'stylus', 'webpack'])

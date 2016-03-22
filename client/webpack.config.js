@@ -2,7 +2,7 @@ let webpack = require('webpack');
 
 module.exports = {
 	entry: {
-		'client/client': './src/client/client.js'
+		'client': './src/client.js'
 	},
 	target: 'web',
 	output: {
@@ -44,7 +44,6 @@ module.exports = {
 	plugins: [
 		new webpack.IgnorePlugin(/vertx/),
 		new webpack.ProvidePlugin({
-			$: 'jquery'
 		})
 	]
 };

@@ -1,0 +1,23 @@
+//- for client
+
+doctype html
+head
+	base(href='./')
+	meta(charset='utf-8')
+	meta(http-equiv='x-ua-compatible', content='ie=edge')
+
+	link(rel="stylesheet" type="text/css" href="./css/skeleton.css")
+	link(rel="stylesheet" type="text/css" href="./style-client.css")
+
+body
+	.settings.hidden
+		.item.settings__status not-connected
+		.item
+			input#name.settings__name(type='text' value='')
+			button.settings__update Update
+
+	canvas.canvas
+
+	script(src='js/jquery-2.2.2.min.js')
+	script(src='js/createjs-2015.11.26.min.js')
+	script(src='client.js')

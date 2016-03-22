@@ -3,15 +3,17 @@
 #include "ofMain.h"
 #include "ofxDatGui.h"
 #include "ofxSyphon.h"
+#include "ofxJSON.h"
 #include "ofxLibwebsockets.h"
 
 #include "Monitor.h"
 
-#define SYPHON_NAME ""
-#define SYPHON_APP "Simple Server"
+#define SYPHON_NAME "Main Output"
+#define SYPHON_APP "VDMX5"
 #define GUI_WIDTH 280
-#define WIDTH 640
-#define HEIGHT 160
+#define WIDTH 320
+#define HEIGHT 80
+#define SCALE 3
 
 class ofApp : public ofBaseApp{
 
@@ -19,6 +21,8 @@ public:
 	void setup();
 	void update();
 	void draw();
+    
+    void loadMonitor();
 
 	void keyPressed(int key);
 	void keyReleased(int key);
@@ -31,6 +35,13 @@ public:
 	void windowResized(int w, int h);
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
+    
+    void onMessage(ofxLibwebsockets::Event& args);
+    void onConnect( ofxLibwebsockets::Event& args );
+    void onOpen( ofxLibwebsockets::Event& args );
+    void onClose( ofxLibwebsockets::Event& args );
+    void onIdle( ofxLibwebsockets::Event& args );
+    void onBroadcast( ofxLibwebsockets::Event& args );
 
 	ofxDatGui *gui;
     ofxDatGuiToggle *guiServing;
@@ -38,9 +49,17 @@ public:
 	ofxSyphonClient syphonClient;
 	ofxSyphonServerDirectory syphonDir;
     
-    vector<Monitor> monitorList;
+    map<string, Monitor*> monitorList;
     
     ofFbo fbo;
     ofPixels pixels;
+    
+    
+    int port = 8989;
+    ofxLibwebsockets::Server wsServer;
+    
+    stringstream ss;
+    
+    ofxJSONElement json;
 		
 };

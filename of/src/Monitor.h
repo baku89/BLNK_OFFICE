@@ -9,19 +9,22 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxLibwebsockets.h"
 
 class Monitor {
 public:
     
-    Monitor(string _name, float _x, float _y) {
-        name = _name;
+    Monitor(float _x, float _y) {
         x = _x;
         y = _y;
     };
     
-    string name;
+    bool getEnabled() {
+        return conn != NULL;
+    }
+    
     float x, y;
+    ofxLibwebsockets::Connection *conn = NULL;
     ofColor color;
-    bool enabled = false;
     
 };

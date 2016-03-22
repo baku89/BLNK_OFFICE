@@ -6,13 +6,13 @@ void ofApp::setup(){
 	
     // scene
 	ofSetWindowTitle("OfficeBlink");
-	ofSetWindowShape(WIDTH + GUI_WIDTH, HEIGHT);
-	ofSetFrameRate(60);
+	ofSetWindowShape(WIDTH * SCALE + GUI_WIDTH, HEIGHT * SCALE);
+	ofSetFrameRate(30);
 	
     // syphon and texture
 	syphonClient.setup();
 	syphonClient.set(SYPHON_NAME, SYPHON_APP);
-    pixels.allocate(718, 360, OF_IMAGE_COLOR_ALPHA);
+    pixels.allocate(WIDTH, HEIGHT, OF_IMAGE_COLOR_ALPHA);
     
     fbo.allocate(WIDTH, HEIGHT);
 	
@@ -21,26 +21,73 @@ void ofApp::setup(){
 	gui->setTheme(new ofxDatGuiThemeCharcoal());
 	gui->setWidth(GUI_WIDTH);
     gui->addFRM();
-	gui->addTextInput("port")->setText("8989");
     guiServing = gui->addToggle("serving");
     
-    // setup monitor list
-    monitorList.push_back(Monitor("baku-mbp", 0.5, 0.5));
-    monitorList.push_back(Monitor("baku-pro_1", 0.2, 0.2));
-    monitorList.push_back(Monitor("baku-pro_2", 0.8, 0.2));
+    // setup websocket server
+    ofxLibwebsockets::ServerOptions options = ofxLibwebsockets::defaultServerOptions();
+    options.port = port;
+    options.bUseSSL = false;
+    wsServer.setup(options);
+        
+    wsServer.addListener(this);
     
+    // setup monitor list
+    string monitorListFile = "monitor-list.json";
+    
+    loadMonitor();
+    
+//    monitorList["5ive-imac"]    = new Monitor(0.5, 0.8);
+//    monitorList["3no"]          = new Monitor(0.5, 0.4);
+//    monitorList["d-imac"]       = new Monitor(0.5, 0.8);
+//    
+//    monitorList["d-mba"]        = new Monitor(0.5, 0.8);
+//    monitorList["baku-mbp"]     = new Monitor(0.5, 0.4);
+//    monitorList["baku-pro1"]    = new Monitor(0.5, 0.5);
+//    monitorList["baku-pro2"]    = new Monitor(0.5, 0.6);
+//    monitorList["baku-va"]      = new Monitor(0.5, 0.6);
+//    monitorList["baku-imac"]    = new Monitor(0.5, 0.8);
+//    monitorList["dell"]         = new Monitor(0.5, 0.7);
+//    
+//    monitorList["yu"]           = new Monitor(0.5, 0.7);
+//    
+//    monitorList["koki1"]        = new Monitor(0.5, 0.7);
+//    monitorList["koki2"]        = new Monitor(0.5, 0.7);
+    
+}
+
+//--------------------------------------------------------------
+void ofApp::loadMonitor() {
+    
+    monitorList.clear();
+    
+    bool bParse = json.open("monitor-list.json");
+    
+    if (bParse) {
+        
+        for (Json::ValueIterator itr = json.begin(); itr != json.end(); itr++) {
+            string key = itr.key().asString();
+            float x = json[key][0].asFloat();
+            float y = json[key][1].asFloat();
+            
+            monitorList[key] = new Monitor(x, y);
+        }
+        
+    } else {
+        
+        ofLog(OF_LOG_ERROR, "Cannot parse monitor-list.json");
+        
+    }
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
     
-    bool serving = guiServing->getEnabled();
-
-
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+    
+    bool serving = guiServing->getEnabled();
 	
 	ofClear(0);
 	
@@ -56,32 +103,47 @@ void ofApp::draw(){
     fbo.end();
     
     ofSetColor(255);
-    fbo.draw(0, 0);
+    fbo.draw(0, 0, WIDTH * SCALE, HEIGHT * SCALE);
     fbo.readToPixels(pixels);
     
     int x, y;
     
-    for (auto monitor : monitorList) {
+    for (auto elm : monitorList) {
+
+        auto name = elm.first;
+        auto monitor = elm.second;
         
         // get color
-        x = monitor.x * WIDTH;
-        y = monitor.y * HEIGHT;
+        x = monitor->x * WIDTH;
+        y = monitor->y * HEIGHT;
         ofColor c = pixels.getColor(x, y);
         
         // draw marker
         ofSetColor(c);
-        
-        ofDrawCircle(x, y, 10);
+        ofDrawCircle(x * SCALE, y * SCALE, 10);
         
         ofSetColor(255);
-        ofDrawCircle(x, y, 2);
+        ofDrawCircle(x * SCALE, y * SCALE, 2);
         
-        if (monitor.enabled) {
+        if (monitor->getEnabled()) {
             ofSetColor(255);
         } else {
             ofSetColor(255, 0, 0);
         }
-        ofDrawBitmapString(monitor.name, x + 7, y + 3);
+        ofDrawBitmapString(name, x * SCALE + 7, y * SCALE + 3);
+        
+        // send
+        if (serving && monitor->getEnabled()) {
+            
+            if (c != monitor->color) {
+                ss.str("");
+                ss << "#" << hex << setw(6) << setfill('0') << c.getHex();
+                monitor->conn->send(ss.str());
+            }
+            
+            // update
+            monitor->color = c;
+        }
     }
 	
 	ofPopMatrix();
