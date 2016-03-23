@@ -14,32 +14,108 @@ html, body
 *, *:before, *:after
 	box-sizing border-box
 
+
+
+
+// --------------------------------------------------
+// settings
+
+h1
+	font-size 1.5rem
+	letter-spacing .1em
+	margin 5px 4px 20px
+	// text-align center
+
 .settings
 	position absolute
-	background #eee
-	width 300px
+	background #fcfafd
+	width 320px
 	height 100%
 	overflow scroll
 	left 0
 	top 0
 	padding 10px
 	transform translate(0%, 0)
+	transition transform .2s ease
 	z-index 100
 
 	&.hidden
 		transform translate(-100%, 0)
 
-.item
-	padding 10px 0
+input.settings__status
+	border-color transparent
+	background transparent
 
+.settings__label
+	display inline-block
+	margin 0 5px
+	width 45px
+
+	&.auto
+		width auto
+
+.settings__coord
+	position relative
+	width 100%
+	height 0
+	padding-top 25%
+	margin-bottom 20px
+	border-radius 3px
+	background #444
+	overflow hidden
+
+.settings__coord-map
+	position absolute
+	top 0
+	left 0
+	width 100%
+	height auto
+	border-radius 3px
+
+.settings__coord-point
+	position absolute
+	top 50%
+	left 50%
+	width 7px
+	height 7px
+	margin-top -4px
+	margin-left -4px
+	border-radius 50%
+	background white
+	z-index 10
+
+	&:before,
+	&:after
+		content: "\00a0 "
+		display block
+		position absolute
+		background rgba(255, 255, 255, 0.5)
+
+	&:before
+		width 1000px
+		top 3px
+		left -500px
+		height 1px
+
+	&:after
+		width 1px
+		height 1000px
+		left 3px
+		top -500px
+
+
+
+
+// --------------------------------------------------
 
 .viewer
 	position relative
 	width 100%
 	height 100%
+	background black
 
 .canvas,
-.canvas-image
+.canvas-desktop
 	position absolute
 	top 0
 	left 0

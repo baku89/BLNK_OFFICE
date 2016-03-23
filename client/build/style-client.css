@@ -104,10 +104,15 @@ body {
 *:after {
   box-sizing: border-box;
 }
+h1 {
+  font-size: 1.5rem;
+  letter-spacing: 0.1em;
+  margin: 5px 4px 20px;
+}
 .settings {
   position: absolute;
-  background: #eee;
-  width: 300px;
+  background: #fcfafd;
+  width: 320px;
   height: 100%;
   overflow: scroll;
   left: 0;
@@ -115,22 +120,85 @@ body {
   padding: 10px;
   -webkit-transform: translate(0%, 0);
   transform: translate(0%, 0);
+  -webkit-transition: -webkit-transform 0.2s ease;
+  transition: -webkit-transform 0.2s ease;
+  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, -webkit-transform 0.2s ease;
   z-index: 100;
 }
 .settings.hidden {
   -webkit-transform: translate(-100%, 0);
   transform: translate(-100%, 0);
 }
-.item {
-  padding: 10px 0;
+input.settings__status {
+  border-color: transparent;
+  background: transparent;
+}
+.settings__label {
+  display: inline-block;
+  margin: 0 5px;
+  width: 45px;
+}
+.settings__label.auto {
+  width: auto;
+}
+.settings__coord {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-top: 25%;
+  margin-bottom: 20px;
+  border-radius: 3px;
+  background: #444;
+  overflow: hidden;
+}
+.settings__coord-map {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  border-radius: 3px;
+}
+.settings__coord-point {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  margin-top: -4px;
+  margin-left: -4px;
+  border-radius: 50%;
+  background: #fff;
+  z-index: 10;
+}
+.settings__coord-point:before,
+.settings__coord-point:after {
+  content: "\00a0 ";
+  display: block;
+  position: absolute;
+  background: rgba(255,255,255,0.5);
+}
+.settings__coord-point:before {
+  width: 1000px;
+  top: 3px;
+  left: -500px;
+  height: 1px;
+}
+.settings__coord-point:after {
+  width: 1px;
+  height: 1000px;
+  left: 3px;
+  top: -500px;
 }
 .viewer {
   position: relative;
   width: 100%;
   height: 100%;
+  background: #000;
 }
 .canvas,
-.canvas-image {
+.canvas-desktop {
   position: absolute;
   top: 0;
   left: 0;

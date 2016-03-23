@@ -12,14 +12,28 @@
 void ofApp::onMessage(ofxLibwebsockets::Event& args) {
 
     string type = args.json["type"].asString();
+    Json::Value json = args.json;
     
-    if (type == "add-user") {
-        string name = args.json["name"].asString();
+    if (type == "update-user") {
         
-        if (monitorList.count(name) != 0) {
-            auto monitor = monitorList[name];
-            monitor->conn = &args.conn;
+        Monitor *monitor = NULL;
+        
+        for (auto m : monitorList) {
+            if (m->conn == &args.conn) {
+                cout << "mikkatta" << endl;
+                monitor = m;
+                break;
+            }
         }
+        if (monitor == NULL) {
+            monitor = new Monitor();
+            monitor->conn = &args.conn;
+            monitorList.push_back(monitor);
+        }
+        
+        monitor->name = json["name"].asString();
+        monitor->x = json["x"].asFloat();
+        monitor->y = json["y"].asFloat();
     }
 }
 
@@ -35,11 +49,9 @@ void ofApp::onOpen( ofxLibwebsockets::Event& args) {
 
 //--------------------------------------------------------------
 void ofApp::onClose( ofxLibwebsockets::Event& args) {
-    
-    for (auto elm : monitorList) {
-        auto monitor = elm.second;
-        if (monitor->conn == &args.conn) {
-            monitor->conn = NULL;
+    for (int i = 0; i < monitorList.size(); i++) {
+        if (monitorList[i]->conn == &args.conn) {
+            monitorList.erase(monitorList.begin() + i);
         }
     }
 }

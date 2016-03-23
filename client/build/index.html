@@ -3,19 +3,41 @@
   <base href="./">
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" type="text/css" href="./css/normalize.css">
   <link rel="stylesheet" type="text/css" href="./css/skeleton.css">
   <link rel="stylesheet" type="text/css" href="./style-client.css">
 </head>
 <body>
-  <div class="settings hidden">
-    <div class="item settings__status">not-connected</div>
-    <div class="item">
-      <input id="name" type="text" value="" class="settings__name">
-      <button class="settings__update">Update</button>
+  <div class="settings">
+    <h1>◆BLNK_OFFICE◆</h1>
+    <div class="settings__item">
+      <div class="settings__label">status</div>
+      <input type="text" value="disconnected" disabled class="settings__status">
+    </div>
+    <div class="settings__item">
+      <div class="settings__label">name</div>
+      <input id="name" type="text" value="">
+    </div>
+    <div class="settings__item">
+      <div>
+        <div class="settings__label auto">x</div>
+        <input id="x" type="number" value="0.5" min="0" max="1" step="0.05">
+        <div class="settings__label auto">y</div>
+        <input id="y" type="number" value="0.5" min="0" max="1" step="0.05">
+      </div>
+      <div class="settings__coord">
+        <div class="settings__coord-point"></div><img src="map.png" class="settings__coord-map">
+      </div>
+    </div>
+    <div class="settings__item">
+      <button class="settings__update button-primary">Update</button>
+      <button class="settings__close">Close</button>
     </div>
   </div>
   <div class="viewer">
-    <canvas class="canvas"></canvas><img id="canvas-wallpaper" class="canvas-image"><img id="canvas-normal" class="canvas-image">
+    <canvas class="canvas"></canvas><img class="canvas-desktop">
   </div>
   <script src="js/jquery-2.2.2.min.js"></script>
   <script src="js/createjs-2015.11.26.min.js"></script>

@@ -5,7 +5,7 @@
 void ofApp::setup(){
 	
     // scene
-	ofSetWindowTitle("OfficeBlink");
+	ofSetWindowTitle("◆ B L N K _ O F F I C E ◆");
 	ofSetWindowShape(WIDTH * SCALE + GUI_WIDTH, HEIGHT * SCALE);
 	ofSetFrameRate(30);
 	
@@ -18,8 +18,9 @@ void ofApp::setup(){
 	
 	// gui
 	gui = new ofxDatGui(ofxDatGuiAnchor::TOP_LEFT);
-	gui->setTheme(new ofxDatGuiThemeCharcoal());
+	gui->setTheme(new ofxDatGuiThemeWireframe());
 	gui->setWidth(GUI_WIDTH);
+    gui->addLabel(":::: BLNK_OFFICE ::::");
     gui->addFRM();
     guiDesktop = gui->addToggle("desktop");
     guiDesktop->setEnabled(false);
@@ -36,32 +37,6 @@ void ofApp::setup(){
     
     // osc
     osc.setup(OSC_PORT);
-    
-    // setup monitor list
-    loadMonitor();
-    
-}
-
-//--------------------------------------------------------------
-void ofApp::loadMonitor() {
-    
-    monitorList["5ive-imac"]    = new Monitor(0.05, 0.2);
-    monitorList["3no"]          = new Monitor(0.15, 0.5);
-    monitorList["d-imac"]       = new Monitor(0.25, 0.8);
-    
-    monitorList["d-mba"]        = new Monitor(0.3, 0.2);
-    monitorList["baku-mbp"]     = new Monitor(0.4, 0.5);
-    monitorList["baku-pro1"]    = new Monitor(0.5, 0.8);
-    monitorList["baku-pro2"]    = new Monitor(0.55, 0.2);
-    monitorList["baku-va"]      = new Monitor(0.6, 0.5);
-    monitorList["dell"]         = new Monitor(0.7, 0.8);
-    monitorList["baku-imac"]    = new Monitor(0.75, 0.2);
-    
-    monitorList["yu"]           = new Monitor(0.8, 0.5);
-    
-    monitorList["koki1"]        = new Monitor(0.9, 0.8);
-    monitorList["koki2"]        = new Monitor(0.95, 0.5);
-    
 }
 
 //--------------------------------------------------------------
@@ -74,8 +49,9 @@ void ofApp::update(){
         
         if (address == "/desktop") {
             int result = m.getArgAsInt(0);
-            cout << result;
-            guiDesktop->setEnabled(result > 0);
+            isDesktop = result == 1;
+            guiDesktop->setEnabled(isDesktop);
+            cout << "cdeskto" << result;
             ss.str("");
             ss << "desktop:" << result;
             wsServer.send(ss.str());
@@ -107,10 +83,7 @@ void ofApp::draw(){
     
     int x, y;
     
-    for (auto elm : monitorList) {
-
-        auto name = elm.first;
-        auto monitor = elm.second;
+    for (auto monitor : monitorList) {
         
         // get color
         x = monitor->x * WIDTH;
@@ -124,19 +97,21 @@ void ofApp::draw(){
         ofSetColor(255);
         ofDrawCircle(x * SCALE, y * SCALE, 2);
         
-        if (monitor->getEnabled()) {
-            ofSetColor(255);
-        } else {
-            ofSetColor(255, 0, 0);
-        }
-        ofDrawBitmapString(name, x * SCALE + 7, y * SCALE + 3);
+        ofSetColor(255);
+        ofDrawBitmapString(monitor->name, x * SCALE + 7, y * SCALE + 3);
         
         // send
-        if (serving && monitor->getEnabled()) {
+        if (serving) {
             
             if (c != monitor->color) {
+                
                 ss.str("");
-                ss << "color:#" << hex << setw(6) << setfill('0') << c.getHex();
+                if (isDesktop) {
+                    ss << "opacity:" << (float)c.getBrightness() / 255.0f;
+//                    cout << c.getBrightness() / 255.0 << endl;
+                } else {
+                    ss << "color:#" << hex << setw(6) << setfill('0') << c.getHex();
+                }
                 monitor->conn->send(ss.str());
             }
             
@@ -146,6 +121,10 @@ void ofApp::draw(){
     }
 	
 	ofPopMatrix();
+    
+    ofSetHexColor(0xfcfafd);
+    ofDrawRectangle(0, 0, GUI_WIDTH, ofGetHeight());
+    ofSetColor(255);
 }
 
 //--------------------------------------------------------------

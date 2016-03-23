@@ -21,7 +21,8 @@ class Client {
 
 		this.msgFunc = {
 			color: this.canvas.fill,
-			desktop: this.canvas.setDesktop
+			desktop: this.canvas.toggleDesktop,
+			opacity: this.canvas.opacity
 		}
 	}
 
@@ -33,7 +34,8 @@ class Client {
 	}
 
 	onDisconnect() {
-		this.settings.status = 'non-connected'
+		this.settings.status = 'disconnected'
+		this.canvas.toggleDesktop(false)
 		this.canvas.fill('black')
 	}
 
@@ -44,8 +46,10 @@ class Client {
 	updateUser() {
 		this.canvas.updateName(this.settings.name)
 		this.socket.send({
-			'type': 'add-user',
-			'name': this.settings.name
+			'type': 'update-user',
+			'name': this.settings.name,
+			'x': this.settings.x,
+			'y': this.settings.y
 		})
 	}
 }

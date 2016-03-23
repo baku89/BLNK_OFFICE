@@ -5,22 +5,41 @@ head
 	base(href='./')
 	meta(charset='utf-8')
 	meta(http-equiv='x-ua-compatible', content='ie=edge')
+	meta(name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1")
 
+	link(href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css")
+
+	link(rel="stylesheet" type="text/css" href="./css/normalize.css")
 	link(rel="stylesheet" type="text/css" href="./css/skeleton.css")
 	link(rel="stylesheet" type="text/css" href="./style-client.css")
 
 body
-	.settings.hidden
-		.item.settings__status not-connected
-		.item
-			input#name.settings__name(type='text' value='')
-			button.settings__update Update
+	.settings
+		h1 ◆BLNK_OFFICE◆
+		.settings__item
+			.settings__label status
+			input.settings__status(type='text' value='disconnected' disabled)
+		.settings__item
+			.settings__label name
+			input#name(type='text' value='')
+		.settings__item
+			div
+				.settings__label.auto x
+				input#x(type='number' value='0.5' min='0' max='1' step='0.05')
+				.settings__label.auto y
+				input#y(type='number' value='0.5' min='0' max='1' step='0.05')
+			.settings__coord
+				.settings__coord-point
+				img.settings__coord-map(src='map.png')
+		.settings__item
+			button.settings__update.button-primary Update
+			button.settings__close Close
+
 
 
 	.viewer
 		canvas.canvas
-		img#canvas-wallpaper.canvas-image
-		img#canvas-normal.canvas-image
+		img.canvas-desktop
 
 	script(src='js/jquery-2.2.2.min.js')
 	script(src='js/createjs-2015.11.26.min.js')

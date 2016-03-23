@@ -23,8 +23,6 @@ public:
 	void setup();
 	void update();
 	void draw();
-    
-    void loadMonitor();
 
 	void keyPressed(int key);
 	void keyReleased(int key);
@@ -52,10 +50,13 @@ public:
 	ofxSyphonClient syphonClient;
 	ofxSyphonServerDirectory syphonDir;
     
-    map<string, Monitor*> monitorList;
+    vector<Monitor*> monitorList;
+//    map<string, Monitor*> monitorList;
     
     ofFbo fbo;
     ofPixels pixels;
+    
+    bool isDesktop = false;
     
     
     int port = 8989;

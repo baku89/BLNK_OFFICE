@@ -1,32 +1,36 @@
-/* global createjs */
-
 export default class Canvas {
 
 	constructor() {
 
-		this.canvas = $('.canvas')[0]
+		this.$canvas = $('.canvas')[0]
+		this.desktop = $('.canvas-desktop')[0]
+		this.$desktop = $('.canvas-desktop')
+
 		this.fill = this.fill.bind(this)
-		this.$desktop = $('.canvas-image')
+		this.opacity = this.opacity.bind(this)
+		this.toggleDesktop = this.toggleDesktop.bind(this)
 
-		this.setDesktop = this.setDesktop.bind(this)
+		window.desktop = this.desktop
 
-		this.setDesktop(1)
+		this.toggleDesktop(false)
 	}
 
 	fill(color) {
-		this.canvas.style.backgroundColor = color
+		this.$canvas.style.backgroundColor = color
 	}
 
-	setDesktop(index) {
+	opacity(alpha) {
+		this.$desktop.css('opacity', parseFloat(alpha))
+	}
 
-		for (let i = 0; i < 2; i++) {
-			this.$desktop[i].style.opacity = (index-1 == i) ? 1 : 0
-		}
+	toggleDesktop(value) {
+		let flag = value == 1
+		this.desktop.style.visibility = flag ? 'visible' : 'hidden'
+		this.$canvas.style.visibility = flag ? 'hidden' : 'visible'
 	}
 
 	updateName(name) {
-		$('#canvas-wallpaper').attr('src', `./desktop/${name}_wallpaper.png`)
-		$('#canvas-normal').attr('src', `./desktop/${name}_normal.png`)
+		this.desktop.src = './desktop/desktop.png'
 	}
 
 }
