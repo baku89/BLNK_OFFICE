@@ -2,7 +2,7 @@ import Settings from './settings.js'
 import Socket from './socket.js'
 import Canvas from './canvas.js'
 
-const WS_HOST = 'ws://10.0.1.141:8989'
+const WS_HOST = 'ws://10.0.1.142:8989'
 
 class Client {
 
